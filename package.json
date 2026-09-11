@@ -1,0 +1,24 @@
+{
+  "name": "claude-usage-alerts",
+  "version": "0.1.0",
+  "description": "Desktop, webhook and email alerts when your Claude Code usage crosses a threshold. Wraps your existing statusline.",
+  "type": "module",
+  "bin": {
+    "claude-usage-alerts": "bin/claude-usage-alerts.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "keywords": ["claude", "claude-code", "statusline", "rate-limit", "alerts"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/willsmithte/claude-usage-alerts"
+  }
+}
