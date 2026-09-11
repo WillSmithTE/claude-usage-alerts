@@ -38,15 +38,28 @@ async function handleSend(request: Request, env: Env): Promise<Response> {
 	if (status !== 'confirmed') {
 		// One confirmation per address per 7 days, whatever the caller does.
 		if (status === 'pending') return json(202, { status: 'confirmation_pending' })
-		await env.RELAY_KV.put(keys.status(parsed.to), 'pending', { expirationTtl: CONFIRM_TTL_MS / 1000 })
 		const link = await confirmLink(env.BASE_URL, env.CONFIRM_SECRET, parsed.to)
-		await deliver(env, parsed.to, confirmSubject(), confirmBody(link))
+		const failed = await tryDeliver(env, parsed.to, confirmSubject(), confirmBody(link))
+		if (failed) return failed
+		// Marked pending only after the mail went out, so a failed send can be retried.
+		await env.RELAY_KV.put(keys.status(parsed.to), 'pending', { expirationTtl: CONFIRM_TTL_MS / 1000 })
 		return json(202, { status: 'confirmation_sent' })
 	}
 
 	if (!(await bumpCounter(env.RELAY_KV, keys.addressDay(parsed.to, day), DAILY_PER_ADDRESS))) return json(429, { error: 'daily alert cap reached for this address' })
-	await deliver(env, parsed.to, subject(parsed), body(parsed))
+	const failed = await tryDeliver(env, parsed.to, subject(parsed), body(parsed))
+	if (failed) return failed
 	return json(202, { status: 'sent' })
+}
+
+async function tryDeliver(env: Env, to: string, subj: string, text: string): Promise<Response | null> {
+	try {
+		await deliver(env, to, subj, text)
+		return null
+	} catch (e) {
+		console.error('email delivery failed', e instanceof Error ? e.message : e)
+		return json(502, { error: 'email delivery failed' })
+	}
 }
 
 const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
