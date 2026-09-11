@@ -3,7 +3,11 @@
   "name": "claude-usage-alerts-relay",
   "main": "src/index.ts",
   "compatibility_date": "2025-06-20",
-  "routes": [{ "pattern": "alerts.usero.io", "custom_domain": true }],
+  "routes": [
+    { "pattern": "alerts.usero.io", "custom_domain": true },
+    // Explicit route too: the zone has a */* route to the main app that beats custom domains.
+    { "pattern": "alerts.usero.io/*", "zone_name": "usero.io" }
+  ],
   "kv_namespaces": [{ "binding": "RELAY_KV", "id": "f57d540d65e24ac695d1931251ef38a7" }],
   "vars": { "BASE_URL": "https://alerts.usero.io" },
   "observability": { "enabled": true }
