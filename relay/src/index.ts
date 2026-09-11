@@ -39,7 +39,7 @@ async function handleSend(request: Request, env: Env): Promise<Response> {
 		// One confirmation per address per 7 days, whatever the caller does.
 		if (status === 'pending') return json(202, { status: 'confirmation_pending' })
 		const link = await confirmLink(env.BASE_URL, env.CONFIRM_SECRET, parsed.to)
-		const failed = await tryDeliver(env, parsed.to, confirmSubject(), confirmBody(link))
+		const failed = await tryDeliver(env, parsed.to, confirmSubject(parsed.to), confirmBody(link, parsed.to))
 		if (failed) return failed
 		// Marked pending only after the mail went out, so a failed send can be retried.
 		await env.RELAY_KV.put(keys.status(parsed.to), 'pending', { expirationTtl: CONFIRM_TTL_MS / 1000 })

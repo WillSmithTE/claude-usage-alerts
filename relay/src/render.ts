@@ -64,13 +64,13 @@ function advice(req: SendRequest): string {
 	return 'No action needed yet, this is a heads up so the limit does not land mid task.'
 }
 
-export function confirmSubject(): string {
-	return 'Confirm Claude usage alerts to this address'
+export function confirmSubject(to: string): string {
+	return `Confirm Claude usage alerts for ${to}`
 }
 
-export function confirmBody(link: string): string {
+export function confirmBody(link: string, to: string): string {
 	return [
-		'Someone (probably you) set up claude-usage-alerts to email this address when a Claude Code usage window crosses a threshold.',
+		`Someone (probably you) set up claude-usage-alerts to email ${to} when a Claude Code usage window crosses a threshold.`,
 		'',
 		`Confirm here: ${link}`,
 		'',
