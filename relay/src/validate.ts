@@ -28,8 +28,10 @@ function pct(v: unknown, field: string): number {
 	return v
 }
 
+// The CLI sends epoch seconds; ISO strings are accepted too. Normalised to ISO.
 function isoDate(v: unknown, field: string): string {
-	if (typeof v !== 'string' || Number.isNaN(Date.parse(v))) throw new ValidationError(`${field} must be an ISO date string`)
+	if (typeof v === 'number' && Number.isFinite(v) && v > 0) return new Date(v * 1000).toISOString()
+	if (typeof v !== 'string' || Number.isNaN(Date.parse(v))) throw new ValidationError(`${field} must be epoch seconds or an ISO date string`)
 	return v
 }
 

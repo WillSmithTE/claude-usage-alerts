@@ -14,6 +14,11 @@ describe('validate', () => {
 		expect(r.to).toBe('a@example.com')
 		expect(r.window).toBe('five_hour')
 	})
+	it('accepts epoch seconds for dates and normalises to ISO', () => {
+		const r = parseSendRequest({ ...base, resets_at: 1757900000, burn: { runs_out_at: 1757890000 } })
+		expect(r.resets_at).toBe('2025-09-15T01:33:20.000Z')
+		expect(r.burn?.runs_out_at).toBe('2025-09-14T22:46:40.000Z')
+	})
 	it('accepts optional fields', () => {
 		const r = parseSendRequest({ ...base, other_window: { pct: 40, resets_at: now.toISOString() }, burn: { runs_out_at: null }, tz: 'Australia/Sydney' })
 		expect(r.tz).toBe('Australia/Sydney')
@@ -25,7 +30,7 @@ describe('validate', () => {
 		[{ ...base, pct: '75' }, /pct/],
 		[{ ...base, resets_at: 'soon' }, /resets_at/],
 		[{ ...base, tz: 'Mars/Olympus' }, /tz/],
-		[{ ...base, burn: { runs_out_at: 5 } }, /burn/],
+		[{ ...base, burn: { runs_out_at: 'soon' } }, /burn/],
 		['string', /object/],
 	])('rejects %j', (input, re) => {
 		expect(() => parseSendRequest(input)).toThrow(ValidationError)
