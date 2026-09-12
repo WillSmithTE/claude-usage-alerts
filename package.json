@@ -13,7 +13,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node --test test/"
+    "test": "node --test test/alerts.test.js"
   },
   "keywords": ["claude", "claude-code", "statusline", "rate-limit", "alerts"],
   "license": "MIT",
