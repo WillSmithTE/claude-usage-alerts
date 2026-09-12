@@ -14,7 +14,7 @@ npx claude-usage-alerts init
 - Alerts fire only while a Claude Code session is open. There is no daemon; the check runs each time Claude Code redraws the statusline.
 - The numbers are whatever Claude Code reports. This tool does not measure usage itself and keeps no history beyond a 30 minute sample log for the burn-rate estimate.
 - The 100% threshold is unverified. It is unknown whether Claude Code still emits statusline updates once you are rate limited.
-- Email goes through a small relay at `alerts.usero.io`. The first email to an address is a confirmation link; nothing else is sent until you click it. There is a cap of around 20 emails per address per day.
+- Email goes through a small relay at `alerts.usero.io` (run by [Usero](https://usero.io)). The first email to an address is a confirmation link; nothing else is sent until you click it. There is a cap of around 20 emails per address per day.
 
 ## How it works
 
@@ -102,6 +102,6 @@ Single file, Node 18+, no dependencies.
 
 ## About
 
-Built by Will, who makes Usero (usero.io).
+Built by [Will](https://github.com/WillSmithTE), who makes [Usero](https://usero.io), a user feedback tool for product teams: it clusters what users say, runs user tests, and opens pull requests for the fixes. This script came out of watching my own limits while working on it.
 
 MIT.
