@@ -1,6 +1,6 @@
 {
   "name": "claude-usage-alerts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Desktop, webhook and email alerts when your Claude Code usage crosses a threshold. Wraps your existing statusline.",
   "type": "module",
   "bin": {
@@ -19,6 +19,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/willsmithte/claude-usage-alerts"
+    "url": "https://github.com/WillSmithTE/claude-usage-alerts"
   }
 }
